@@ -1,0 +1,110 @@
+IndraNet - Wie Sie anfangen
+===========================
+
+Sie haben alle Dateien. Es sind vier Schritte.
+
+
+SCHRITT 1 - ENTPACKEN
+---------------------
+Diesen Ordner an einen Ort ohne Leerzeichen legen, zum Beispiel:
+
+    C:\Projekte\IndraNet
+
+NICHT auf den Desktop. Virenscanner ueberwachen den Desktop besonders
+streng, und OneDrive synchronisiert ihn oft in die Cloud - beides wollen
+Sie bei diesem Projekt nicht.
+
+Alle Dateien gehoeren FLACH nebeneinander. Keine Unterordner anlegen.
+
+
+SCHRITT 2 - EINGABEAUFFORDERUNG OEFFNEN
+---------------------------------------
+Im Explorer in den Ordner gehen. Oben in die Adresszeile klicken,
+"cmd" eintippen, Enter druecken. Es oeffnet sich ein schwarzes Fenster,
+das bereits im richtigen Ordner steht.
+
+
+SCHRITT 3 - PRUEFEN UND VORBEREITEN
+-----------------------------------
+Diese drei Befehle nacheinander eingeben:
+
+    python pruefen.py
+
+        Sollte "Alles vorhanden" melden.
+        Falls Python fehlt: von https://www.python.org/downloads/
+        installieren und dabei "Add python.exe to PATH" ankreuzen.
+
+    python -m pip install cryptography numpy pyinstaller
+
+        Laedt die drei benoetigten Bibliotheken. Dauert 1-2 Minuten.
+        Warnungen ueber "not on PATH" koennen Sie ignorieren.
+
+    python test_indranet.py
+
+        Sollte "144 bestanden, 0 fehlgeschlagen" melden.
+
+
+SCHRITT 4 - WINDOWS-ANWENDUNG BAUEN
+-----------------------------------
+    python -m PyInstaller IndraNet.spec --noconfirm --clean
+
+Dauert 1-3 Minuten. Ergebnis:
+
+    dist\IndraNet\IndraNet.exe
+
+Diese Datei doppelklicken. Es oeffnet sich ein Konsolenfenster, und im
+Browser erscheint der Einrichtungsassistent. Fertig.
+
+
+OPTIONAL - INSTALLATIONSPROGRAMM
+--------------------------------
+Nur noetig, wenn Sie IndraNet weitergeben wollen.
+
+    1. Inno Setup 6 installieren: https://jrsoftware.org/isdl.php
+    2. installer.iss damit oeffnen
+    3. auf "Compile" klicken
+
+Ergebnis: Ausgabe\IndraNet-Setup-1.1.exe - eine einzelne Datei.
+
+
+WENN DER VIRENSCANNER SICH MELDET
+---------------------------------
+Das kommt vor und ist ein Fehlalarm. Programme, die mit PyInstaller
+gebaut wurden, aehneln im Verhalten Schadsoftware-Ladern.
+
+Die Datei build_windows.bat wird besonders oft beanstandet. Sie ist
+NICHT noetig - sie enthaelt nur die Befehle aus Schritt 3 und 4 als
+Bequemlichkeit. Wenn Ihr Scanner sie loescht: ignorieren.
+
+Naeheres in BUILD.md, Abschnitt "Virenscanner".
+
+
+WAS IST WAS?
+------------
+    START HIER.txt          diese Datei
+    pruefen.py              prueft Vollstaendigkeit und Umgebung
+    IndraNet.spec           Bauanweisung fuer PyInstaller
+    installer.iss           Bauanweisung fuer das Installationsprogramm
+    build_windows.bat       Bequemlichkeit, nicht noetig
+
+    README.md               Ueberblick, deutsch und englisch
+    MANUAL.de.md            Handbuch fuer Anwender
+    MANUAL.en.md            Manual for users
+    WHITEPAPER.de.md        Architektur, ausfuehrlich
+    WHITEPAPER.en.md        Architecture, detailed
+    BUILD.md                fuer den, der die Windows-Version baut
+    LICENSE                 AGPL-3.0
+    LIZENZHINWEIS.md        Hinweise zu fremden Bibliotheken und Daten
+
+    alle uebrigen .py       das Programm selbst (27 Dateien)
+
+
+ZUM AUSPROBIEREN OHNE BAUEN
+---------------------------
+Sie muessen nicht bauen, um IndraNet zu sehen:
+
+    python demo.py                          eine Recherche im Schnelldurchlauf
+    python cli.py init ./test.vault --benutzer ihr.name
+    python cli.py serve ./test.vault --open
+
+Der letzte Befehl oeffnet die Oberflaeche im Browser.

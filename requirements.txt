@@ -1,0 +1,8 @@
+# IndraNet 2 — Laufzeitabhängigkeiten
+cryptography>=42
+anthropic>=1.15
+httpx[socks]>=0.28
+socksio>=1.0
+pypdf>=4
+# Nur für die Tests und die externen Anschlüsse aus Version 1
+numpy

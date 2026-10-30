@@ -1,0 +1,31 @@
+IndraNet - Bitte vor der Installation lesen
+===========================================
+
+WAS IST DAS?
+IndraNet verwaltet, was Ihre Recherche behauptet, und woher jede Behauptung
+stammt. Es laeuft vollstaendig auf diesem Rechner. Es sendet nichts ins
+Internet, ausser Sie fordern es ausdruecklich an.
+
+WO LIEGEN MEINE DATEN?
+In Ihrem Benutzerprofil unter
+    %APPDATA%\IndraNet
+Jede Recherche ist eine verschluesselte Datei mit der Endung .vault.
+Beim Entfernen des Programms bleiben diese Dateien erhalten.
+
+DIE PASSPHRASE
+Beim ersten Start legen Sie eine Passphrase fest. Sie schuetzt alle Daten.
+
+    ES GIBT KEINE WIEDERHERSTELLUNG.
+
+Ohne die Passphrase ist die Recherche verloren - das ist der Sinn der Sache.
+Notieren Sie sie an einem sicheren Ort, der nicht neben dem Rechner liegt.
+
+VIRENSCANNER
+Manche Virenscanner melden bei unsignierten Programmen einen Verdacht.
+Das ist ein Fehlalarm, der bei dieser Art von Programmen haeufig vorkommt.
+Fragen Sie im Zweifel Ihre IT-Abteilung.
+
+SICHERUNGSKOPIEN
+Sichern Sie den Ordner %APPDATA%\IndraNet regelmaessig. Die Dateien sind
+verschluesselt, koennen also auch auf einem Netzlaufwerk liegen. Ohne
+Passphrase kann sie niemand lesen - auch Sie nicht.

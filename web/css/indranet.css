@@ -1,0 +1,535 @@
+/* ==========================================================================
+   IndraNet 2 — Erscheinungsbild
+   Lagezentrale (dunkel, Vorgabe) und Archiv (hell). Nur Systemschriften —
+   die Oberfläche lädt nichts von außen.
+   ========================================================================== */
+
+:root {
+  --mono: "Cascadia Mono", "Cascadia Code", Consolas, "SF Mono", ui-monospace, "DejaVu Sans Mono", monospace;
+  --kopf: Bahnschrift, "DIN Alternate", "Roboto Condensed", "Arial Narrow", system-ui, sans-serif;
+  --text: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  --r: 3px;
+  --schiene: 76px;
+  --leiste: 56px;
+  --seite: 400px;
+  --uebergang: 160ms cubic-bezier(.2,.7,.2,1);
+}
+
+:root[data-thema="lagezentrale"], :root:not([data-thema]) {
+  color-scheme: dark;
+  --grund: #04070b;
+  --grund2: #070c12;
+  --flaeche: #0a1118;
+  --flaeche2: #0e1720;
+  --flaeche3: #13202c;
+  --linie: #18242f;
+  --linie-hell: #24394a;
+  --tinte: #d4e1eb;
+  --tinte-stark: #f1f7fb;
+  --gedaempft: #6c8396;
+  --akzent: #38e1d0;
+  --akzent-tief: #0b3a37;
+  --akzent-glanz: rgba(56,225,208,.22);
+  --bestaetigt: #38e1d0;
+  --einfach: #e6ae43;
+  --umstritten: #ff5d5d;
+  --widerrufen: #4b5c6c;
+  --warn: #ffb347;
+  --raster: rgba(56,225,208,.035);
+  --land: #0f1c26;
+  --land-rand: #1f3342;
+  --meer: #04080d;
+  --t-person: #8db4ff;
+  --t-org: #c59bff;
+  --t-place: #6fe39a;
+  --t-vessel: #5ad1ff;
+  --t-adresse: #9fb3c4;
+  --t-amt: #f2c879;
+  --t-kennung: #7f93a6;
+  --t-betrag: #ffd166;
+  --t-datum: #a7b4c2;
+  --t-register: #ff9f6b;
+  --schatten: 0 18px 50px rgba(0,0,0,.55);
+}
+
+:root[data-thema="archiv"] {
+  color-scheme: light;
+  --grund: #eceff2;
+  --grund2: #e4e8ec;
+  --flaeche: #ffffff;
+  --flaeche2: #f6f8fa;
+  --flaeche3: #edf1f5;
+  --linie: #d3dae1;
+  --linie-hell: #bfc9d3;
+  --tinte: #18212a;
+  --tinte-stark: #05090d;
+  --gedaempft: #5c6a77;
+  --akzent: #12609b;
+  --akzent-tief: #dceaf6;
+  --akzent-glanz: rgba(18,96,155,.16);
+  --bestaetigt: #0f7a5c;
+  --einfach: #9a6b07;
+  --umstritten: #b42828;
+  --widerrufen: #8c959e;
+  --warn: #b5650d;
+  --raster: rgba(0,0,0,0);
+  --land: #dfe5ea;
+  --land-rand: #b9c4ce;
+  --meer: #f4f7f9;
+  --t-person: #2f5fd0;
+  --t-org: #7a3fc4;
+  --t-place: #1d8a4a;
+  --t-vessel: #0b7fae;
+  --t-adresse: #5b6c7c;
+  --t-amt: #9b6a00;
+  --t-kennung: #5f6f7f;
+  --t-betrag: #8a6d00;
+  --t-datum: #5f6b78;
+  --t-register: #c0571f;
+  --schatten: 0 14px 40px rgba(20,30,40,.18);
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--grund);
+  color: var(--tinte);
+  font: 14px/1.5 var(--text);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+[hidden] { display: none !important; }
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: var(--akzent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+::selection { background: var(--akzent-glanz); }
+:focus-visible { outline: 1px solid var(--akzent); outline-offset: 2px; }
+.gedaempft { color: var(--gedaempft); }
+.mono { font-family: var(--mono); font-size: 12.5px; }
+.etikett {
+  font: 600 10px/1 var(--kopf); letter-spacing: .16em; color: var(--gedaempft);
+  text-transform: uppercase;
+}
+h1, h2, h3, h4 { font-family: var(--kopf); font-weight: 600; letter-spacing: .02em; margin: 0; color: var(--tinte-stark); }
+h2 { font-size: 20px; }
+h3 { font-size: 15px; letter-spacing: .06em; text-transform: uppercase; }
+h4 { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--gedaempft); }
+
+/* Scrollbalken */
+* { scrollbar-width: thin; scrollbar-color: var(--linie-hell) transparent; }
+*::-webkit-scrollbar { width: 9px; height: 9px; }
+*::-webkit-scrollbar-thumb { background: var(--linie-hell); border-radius: 9px; border: 2px solid var(--grund); }
+
+/* ------------------------------------------------------------- Knöpfe */
+.knopf {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 8px 14px; border: 1px solid var(--linie-hell); background: var(--flaeche2);
+  border-radius: var(--r); cursor: pointer; font: 600 12px/1.2 var(--kopf);
+  letter-spacing: .1em; text-transform: uppercase; color: var(--tinte);
+  transition: border-color var(--uebergang), background var(--uebergang), color var(--uebergang);
+  white-space: nowrap;
+}
+.knopf:hover { border-color: var(--akzent); color: var(--tinte-stark); }
+.knopf.haupt { background: var(--akzent); border-color: var(--akzent); color: #021412; }
+.knopf.haupt:hover { filter: brightness(1.08); color: #021412; }
+.knopf.gefahr { border-color: color-mix(in srgb, var(--umstritten) 60%, transparent); color: var(--umstritten); }
+.knopf.gefahr:hover { background: color-mix(in srgb, var(--umstritten) 14%, transparent); }
+.knopf.flach { background: transparent; border-color: transparent; }
+.knopf.flach:hover { border-color: var(--linie-hell); }
+.knopf.klein { padding: 5px 9px; font-size: 11px; }
+.knopf:disabled { opacity: .45; cursor: not-allowed; }
+.symbol {
+  width: 34px; height: 34px; border: 1px solid var(--linie); background: transparent;
+  border-radius: var(--r); cursor: pointer; color: var(--gedaempft); font-size: 16px;
+}
+.symbol:hover { color: var(--akzent); border-color: var(--akzent); }
+
+/* ------------------------------------------------------------- Formulare */
+label { display: grid; gap: 5px; font-size: 12px; color: var(--tinte); }
+input:not([type=checkbox]):not([type=radio]):not([type=range]), select, textarea {
+  width: 100%; background: var(--grund2); border: 1px solid var(--linie-hell);
+  border-radius: var(--r); padding: 8px 10px; color: var(--tinte-stark);
+  transition: border-color var(--uebergang), box-shadow var(--uebergang);
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--akzent); box-shadow: 0 0 0 3px var(--akzent-glanz); }
+textarea { resize: vertical; }
+input[type=checkbox] { accent-color: var(--akzent); width: 15px; height: 15px; }
+
+/* ------------------------------------------------------------- Tafeln */
+.tafel {
+  position: relative; background: linear-gradient(180deg, var(--flaeche) 0%, var(--grund2) 100%);
+  border: 1px solid var(--linie); border-radius: var(--r); padding: 18px;
+  display: grid; gap: 12px; align-content: start;
+}
+.tafel::before, .tafel::after {
+  content: ""; position: absolute; width: 10px; height: 10px; border: 1px solid var(--akzent);
+  opacity: .6; pointer-events: none;
+}
+.tafel::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+.tafel::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+.tafel-kopf {
+  display: flex; align-items: center; gap: 10px; font: 600 12px/1 var(--kopf);
+  letter-spacing: .16em; text-transform: uppercase; color: var(--tinte-stark);
+}
+.tafel-kopf .rechts { margin-left: auto; display: flex; gap: 6px; }
+.ecke { font: 500 10px/1 var(--mono); color: var(--akzent); border: 1px solid var(--akzent-tief); padding: 3px 5px; border-radius: 2px; }
+
+/* =================================================================== START */
+.start { position: fixed; inset: 0; overflow: auto; background: radial-gradient(1200px 800px at 75% 30%, color-mix(in srgb, var(--akzent) 7%, transparent), transparent 60%), var(--grund); }
+#start-globus { position: fixed; right: -12vw; top: 50%; transform: translateY(-50%); width: min(78vw, 980px); height: min(78vw, 980px); opacity: .85; pointer-events: none; }
+.start-inhalt { position: relative; max-width: 1180px; margin: 0 auto; padding: 48px 32px 32px; display: grid; gap: 28px; min-height: 100%; grid-template-rows: auto 1fr auto; }
+.start-kopf { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+.marke { display: flex; gap: 18px; align-items: center; }
+.marke h1 { font-size: 46px; letter-spacing: .32em; font-weight: 600; line-height: 1; }
+.marke .unterzeile { margin: 10px 0 0; color: var(--gedaempft); font: 13px/1.4 var(--mono); letter-spacing: .04em; }
+.marke-zeichen { width: 58px; height: 58px; fill: none; stroke: var(--akzent); stroke-width: 1.4; }
+.marke-zeichen .voll { fill: var(--akzent); stroke: none; }
+.start-status { display: grid; gap: 6px; justify-items: end; font: 12px var(--mono); color: var(--gedaempft); }
+.start-raster { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 22px; align-items: start; max-width: 860px; }
+.start-fuss { display: flex; gap: 18px; align-items: center; justify-content: space-between; flex-wrap: wrap; font-size: 12px; border-top: 1px solid var(--linie); padding-top: 16px; }
+.projektliste { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.projektliste li { border: 1px solid var(--linie); border-radius: var(--r); background: var(--grund2); }
+.projektliste .zeile { display: flex; align-items: center; gap: 12px; padding: 12px 14px; cursor: pointer; }
+.projektliste .zeile:hover { background: var(--flaeche2); }
+.projektliste .zeile b { font: 600 15px var(--kopf); letter-spacing: .04em; color: var(--tinte-stark); }
+.projektliste .zeile small { margin-left: auto; font: 11px var(--mono); color: var(--gedaempft); }
+.projektliste form { display: flex; gap: 8px; padding: 0 14px 14px; }
+.schloss { width: 26px; height: 26px; display: grid; place-items: center; border: 1px solid var(--linie-hell); border-radius: 50%; color: var(--akzent); font-size: 12px; }
+
+/* ============================================================ ARBEITSFLÄCHE */
+.arbeit {
+  position: fixed; inset: 0; display: grid;
+  grid-template-columns: var(--schiene) minmax(0, 1fr) auto;
+  grid-template-rows: var(--leiste) minmax(0, 1fr) 28px;
+  grid-template-areas: "leiste leiste leiste" "schiene ansicht seite" "status status status";
+  background:
+    linear-gradient(var(--raster) 1px, transparent 1px) 0 0 / 32px 32px,
+    linear-gradient(90deg, var(--raster) 1px, transparent 1px) 0 0 / 32px 32px,
+    var(--grund);
+}
+.leiste {
+  grid-area: leiste; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 18px;
+  align-items: center; padding: 0 14px; border-bottom: 1px solid var(--linie);
+  background: color-mix(in srgb, var(--grund2) 92%, transparent); backdrop-filter: blur(6px); z-index: 5;
+}
+.leiste-links { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.marke-klein { display: flex; align-items: center; gap: 9px; background: none; border: 0; cursor: pointer; padding: 0; }
+.marke-klein .marke-zeichen { width: 26px; height: 26px; }
+.marke-klein span { font: 600 14px var(--kopf); letter-spacing: .3em; color: var(--tinte-stark); }
+.trenner { width: 1px; height: 26px; background: var(--linie-hell); }
+.projektname { display: grid; gap: 3px; min-width: 0; }
+.projektname strong { font: 600 14px var(--kopf); letter-spacing: .05em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 240px; color: var(--tinte-stark); }
+.leiste-mitte { display: flex; justify-content: center; min-width: 0; }
+.leiste-rechts { display: flex; align-items: center; gap: 8px; }
+
+.suche {
+  display: flex; align-items: stretch; width: min(100%, 860px); height: 38px;
+  border: 1px solid var(--linie-hell); border-radius: var(--r); background: var(--grund);
+  transition: border-color var(--uebergang), box-shadow var(--uebergang);
+}
+.suche:focus-within { border-color: var(--akzent); box-shadow: 0 0 0 3px var(--akzent-glanz), 0 0 30px var(--akzent-glanz); }
+.suche .modus { display: flex; border-right: 1px solid var(--linie); }
+.suche .modus button {
+  border: 0; background: transparent; padding: 0 10px; cursor: pointer; color: var(--gedaempft);
+  font: 600 10.5px var(--kopf); letter-spacing: .14em;
+}
+.suche .modus button.aktiv { color: var(--akzent); background: var(--akzent-tief); }
+.suche select { width: auto; border: 0; border-right: 1px solid var(--linie); border-radius: 0; background: var(--flaeche); font-size: 12px; }
+.suche input#suche-feld { border: 0; background: transparent; box-shadow: none; padding: 0 14px; font: 14px var(--text); }
+.suche input#suche-feld:focus { box-shadow: none; }
+.suche-datei { border: 0; border-left: 1px solid var(--linie); background: transparent; padding: 0 12px; cursor: pointer; color: var(--gedaempft); font-size: 16px; }
+.suche-datei:hover { color: var(--akzent); }
+.suche-los { border: 0; background: var(--akzent); color: #021412; padding: 0 18px; cursor: pointer; font: 700 11px var(--kopf); letter-spacing: .18em; border-radius: 0 2px 2px 0; }
+
+.anzeige {
+  display: flex; align-items: center; gap: 7px; height: 30px; padding: 0 10px; border: 1px solid var(--linie);
+  border-radius: var(--r); background: transparent; cursor: pointer; font: 600 10.5px var(--kopf);
+  letter-spacing: .12em; color: var(--gedaempft); white-space: nowrap;
+}
+.anzeige:hover { border-color: var(--linie-hell); color: var(--tinte); }
+.punkt { width: 7px; height: 7px; border-radius: 50%; background: var(--widerrufen); display: inline-block; }
+.anzeige.gut .punkt, .punkt.gut { background: var(--bestaetigt); box-shadow: 0 0 8px var(--bestaetigt); }
+.anzeige.warn .punkt, .punkt.warn { background: var(--einfach); box-shadow: 0 0 8px var(--einfach); }
+.anzeige.schlecht .punkt, .punkt.schlecht { background: var(--umstritten); box-shadow: 0 0 8px var(--umstritten); }
+.anzeige.arbeitet .punkt { background: var(--akzent); animation: puls 1.1s ease-in-out infinite; }
+@keyframes puls { 50% { opacity: .25; transform: scale(.7); } }
+
+/* ------------------------------------------------------------- Schiene */
+.schiene { grid-area: schiene; display: flex; flex-direction: column; gap: 2px; padding: 10px 8px; border-right: 1px solid var(--linie); background: color-mix(in srgb, var(--grund2) 85%, transparent); }
+.schiene button {
+  position: relative; display: grid; justify-items: center; gap: 3px; padding: 9px 2px 8px;
+  border: 1px solid transparent; border-radius: var(--r); background: transparent; cursor: pointer;
+  color: var(--gedaempft); font: 600 9.5px var(--kopf); letter-spacing: .12em; text-transform: uppercase;
+}
+.schiene .sym { font-size: 18px; line-height: 1; font-family: var(--mono); }
+.schiene button:hover { color: var(--tinte); background: var(--flaeche); }
+.schiene button.aktiv { color: var(--akzent); background: var(--akzent-tief); border-color: color-mix(in srgb, var(--akzent) 30%, transparent); }
+.schiene button.aktiv::before { content: ""; position: absolute; left: -9px; top: 10px; bottom: 10px; width: 2px; background: var(--akzent); box-shadow: 0 0 10px var(--akzent); }
+.schiene-luecke { flex: 1; }
+.zaehler { position: absolute; top: 3px; right: 6px; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 9px; background: var(--einfach); color: #1a1200; font: 700 10px/17px var(--mono); }
+
+/* ------------------------------------------------------------- Ansicht */
+.ansicht { grid-area: ansicht; overflow: auto; position: relative; min-width: 0; outline: none; }
+.ansicht.voll { overflow: hidden; }
+.seite { grid-area: seite; width: var(--seite); border-left: 1px solid var(--linie); background: var(--grund2); overflow: auto; position: relative; }
+.statuszeile {
+  grid-area: status; display: flex; align-items: center; gap: 18px; padding: 0 14px; border-top: 1px solid var(--linie);
+  font: 11px var(--mono); color: var(--gedaempft); background: var(--grund2); white-space: nowrap; overflow: hidden;
+}
+.statuszeile b { color: var(--tinte); font-weight: 600; }
+.statuszeile .rechts { margin-left: auto; }
+
+.seiteninhalt { padding: 22px 26px 40px; display: grid; gap: 18px; max-width: 1500px; }
+.kopfzeile { display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+.kopfzeile .rechts { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+.kopfzeile p { margin: 4px 0 0; color: var(--gedaempft); font-size: 13px; max-width: 760px; }
+
+/* =================================================================== LAGE */
+.lage { display: grid; gap: 14px; padding: 16px; grid-template-columns: repeat(12, minmax(0,1fr)); grid-auto-rows: minmax(0, auto); }
+.kennzahlen { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 12px; }
+.kennzahl { padding: 14px 16px; border: 1px solid var(--linie); border-radius: var(--r); background: var(--flaeche); display: grid; gap: 6px; position: relative; overflow: hidden; }
+.kennzahl b { font: 600 30px/1 var(--kopf); color: var(--tinte-stark); letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+.kennzahl.akzent b { color: var(--akzent); text-shadow: 0 0 18px var(--akzent-glanz); }
+.kennzahl .balken { display: flex; height: 6px; border-radius: 3px; overflow: hidden; background: var(--linie); }
+.kennzahl .balken i { display: block; height: 100%; }
+.lage .kachel-karte { grid-column: span 7; min-height: 420px; padding: 0; overflow: hidden; }
+.lage .kachel-netz { grid-column: span 5; min-height: 420px; padding: 0; overflow: hidden; }
+.lage .kachel-vorschlaege { grid-column: span 5; }
+.lage .kachel-aktivitaet { grid-column: span 4; }
+.lage .kachel-lagebild { grid-column: span 3; }
+.kachel-kopf { position: absolute; top: 12px; left: 14px; z-index: 2; pointer-events: none; }
+.kachel-kopf .knopf { pointer-events: auto; }
+.kachel-fuss { position: absolute; bottom: 10px; right: 12px; z-index: 2; display: flex; gap: 6px; }
+
+.liste { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.liste li { padding: 9px 11px; border: 1px solid var(--linie); border-radius: var(--r); background: var(--grund2); display: grid; gap: 4px; }
+.liste li .zeile { display: flex; gap: 10px; align-items: center; }
+.liste li .zeile .rechts { margin-left: auto; display: flex; gap: 6px; }
+.leer { padding: 28px 18px; text-align: center; color: var(--gedaempft); border: 1px dashed var(--linie-hell); border-radius: var(--r); font-size: 13px; }
+.leer b { display: block; color: var(--tinte); font: 600 14px var(--kopf); letter-spacing: .06em; margin-bottom: 6px; }
+
+.protokoll { font: 11.5px/1.55 var(--mono); color: var(--gedaempft); max-height: 260px; overflow: auto; }
+.protokoll div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.protokoll time { color: var(--linie-hell); margin-right: 8px; }
+.protokoll .neu { color: var(--akzent); }
+
+/* ============================================================ Abzeichen */
+.lage-abz { display: inline-flex; align-items: center; gap: 5px; padding: 2px 7px; border-radius: 2px; font: 600 9.5px/1.4 var(--kopf); letter-spacing: .12em; text-transform: uppercase; border: 1px solid; white-space: nowrap; }
+.lage-abz::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.lage-BESTAETIGT, .lage-bestaetigt { color: var(--bestaetigt); border-color: color-mix(in srgb, var(--bestaetigt) 40%, transparent); }
+.lage-EINFACH_BELEGT, .lage-einfach { color: var(--einfach); border-color: color-mix(in srgb, var(--einfach) 40%, transparent); }
+.lage-UMSTRITTEN, .lage-umstritten { color: var(--umstritten); border-color: color-mix(in srgb, var(--umstritten) 40%, transparent); }
+.lage-WIDERRUFEN, .lage-schlussfolgerung { color: var(--widerrufen); border-color: color-mix(in srgb, var(--widerrufen) 50%, transparent); }
+.typ { display: inline-flex; align-items: center; gap: 6px; font: 600 9.5px var(--kopf); letter-spacing: .14em; text-transform: uppercase; color: var(--gedaempft); }
+.typ i { width: 9px; height: 9px; display: inline-block; border-radius: 50%; background: currentColor; }
+.typ.PERSON { color: var(--t-person); } .typ.ORG { color: var(--t-org); } .typ.PLACE { color: var(--t-place); }
+.typ.VESSEL { color: var(--t-vessel); } .typ.ADRESSE { color: var(--t-adresse); } .typ.AMT { color: var(--t-amt); }
+.typ.KENNUNG { color: var(--t-kennung); } .typ.BETRAG { color: var(--t-betrag); } .typ.DATUM { color: var(--t-datum); }
+.typ.REGISTER { color: var(--t-register); }
+.typ.ORG i { border-radius: 1px; } .typ.PLACE i { transform: rotate(45deg); border-radius: 1px; }
+.sicherheit-hoch { color: var(--bestaetigt); } .sicherheit-mittel { color: var(--einfach); } .sicherheit-niedrig { color: var(--umstritten); }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border: 1px solid var(--linie-hell); border-radius: 20px; background: var(--grund2); cursor: pointer; font-size: 12px; color: var(--tinte); }
+.chip:hover { border-color: var(--akzent); color: var(--akzent); }
+.chip::before { content: "⌕"; color: var(--akzent); font-family: var(--mono); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* =================================================================== NETZ */
+.netz-buehne, .karte-buehne { position: absolute; inset: 0; }
+.netz-buehne svg, .karte-buehne svg { width: 100%; height: 100%; display: block; cursor: grab; }
+.netz-buehne svg:active, .karte-buehne svg:active { cursor: grabbing; }
+.werkzeuge { position: absolute; top: 14px; left: 14px; right: 14px; z-index: 3; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; pointer-events: none; }
+.werkzeuge > * { pointer-events: auto; }
+.werkzeuge .feld { width: 230px; height: 32px; background: color-mix(in srgb, var(--grund) 85%, transparent); }
+.werkzeuge .rechts { margin-left: auto; display: flex; gap: 8px; }
+.werkzeuge .gruppe { display: flex; border: 1px solid var(--linie-hell); border-radius: var(--r); overflow: hidden; background: color-mix(in srgb, var(--grund) 85%, transparent); }
+.werkzeuge .gruppe button { border: 0; background: transparent; padding: 6px 10px; cursor: pointer; font: 600 10.5px var(--kopf); letter-spacing: .12em; color: var(--gedaempft); }
+.werkzeuge .gruppe button.aktiv { background: var(--akzent-tief); color: var(--akzent); }
+.legende { position: absolute; left: 14px; bottom: 14px; z-index: 3; display: grid; gap: 6px; padding: 10px 12px; border: 1px solid var(--linie); border-radius: var(--r); background: color-mix(in srgb, var(--grund) 88%, transparent); font-size: 11px; }
+.legende .reihe { display: flex; gap: 12px; flex-wrap: wrap; }
+.legende .kante { display: inline-flex; align-items: center; gap: 6px; color: var(--gedaempft); font: 10px var(--kopf); letter-spacing: .12em; text-transform: uppercase; }
+.legende .kante i { width: 18px; height: 2px; background: currentColor; display: inline-block; }
+
+.knoten circle, .knoten rect, .knoten path.form { stroke: var(--grund); stroke-width: 1.5px; cursor: pointer; }
+.knoten text { font: 11px var(--text); fill: var(--tinte); paint-order: stroke; stroke: var(--grund); stroke-width: 3px; stroke-linejoin: round; pointer-events: none; }
+.knoten.gewaehlt .ring { stroke: var(--akzent); stroke-width: 1.5px; fill: none; animation: ring 1.8s ease-out infinite; }
+.knoten.markiert .stern { fill: var(--einfach); font-size: 12px; }
+.knoten.gedimmt { opacity: .14; }
+.kante-linie { stroke-opacity: .7; fill: none; }
+.kante-linie.gedimmt { stroke-opacity: .05; }
+.kante-linie.UMSTRITTEN { stroke-dasharray: 4 3; animation: fliessen 1s linear infinite; }
+.kante-linie.WIDERRUFEN { stroke-dasharray: 2 4; }
+.kante-text { font: 9.5px var(--mono); fill: var(--gedaempft); pointer-events: none; paint-order: stroke; stroke: var(--grund); stroke-width: 3px; }
+@keyframes ring { from { r: 14; opacity: .9; } to { r: 30; opacity: 0; } }
+@keyframes fliessen { to { stroke-dashoffset: -14; } }
+
+.tooltip { position: fixed; z-index: 50; pointer-events: none; max-width: 320px; padding: 8px 10px; background: var(--flaeche3); border: 1px solid var(--linie-hell); border-radius: var(--r); box-shadow: var(--schatten); font-size: 12px; }
+.tooltip b { color: var(--tinte-stark); }
+
+/* =================================================================== KARTE */
+.karte-buehne .meer { fill: var(--meer); }
+.karte-buehne .gitter { fill: none; stroke: var(--linie); stroke-width: .5px; stroke-opacity: .7; }
+.karte-buehne .land { fill: var(--land); stroke: var(--land-rand); stroke-width: .5px; }
+.karte-buehne .land.aktiv { fill: color-mix(in srgb, var(--akzent) 10%, var(--land)); stroke: color-mix(in srgb, var(--akzent) 50%, var(--land-rand)); }
+.karte-buehne .umriss { fill: none; stroke: var(--linie-hell); stroke-width: 1px; }
+.bogen { fill: none; stroke-width: 1.6px; stroke-linecap: round; }
+.bogen.fluss { stroke-dasharray: 3 9; animation: fliessen 1.4s linear infinite; stroke-width: 2px; }
+.marker .kern { stroke: var(--grund); stroke-width: 1.5px; cursor: pointer; }
+.marker .welle { fill: none; stroke-width: 1.2px; animation: welle 2.6s ease-out infinite; }
+.marker text { font: 600 11px var(--kopf); letter-spacing: .06em; fill: var(--tinte-stark); paint-order: stroke; stroke: var(--grund); stroke-width: 3.5px; pointer-events: none; }
+.marker text.zahl { font: 700 10px var(--mono); fill: #04110f; stroke: none; }
+@keyframes welle { from { r: 6; opacity: .8; } to { r: 30; opacity: 0; } }
+.karte-ecke { position: absolute; right: 14px; bottom: 14px; z-index: 3; font: 10.5px var(--mono); color: var(--gedaempft); text-align: right; }
+.unverortet { position: absolute; right: 14px; top: 60px; z-index: 3; width: 260px; max-height: 50%; overflow: auto; padding: 12px; border: 1px solid var(--linie); border-radius: var(--r); background: color-mix(in srgb, var(--grund) 90%, transparent); display: grid; gap: 8px; }
+.unverortet .reihe { display: flex; gap: 6px; align-items: center; font-size: 12px; }
+.unverortet .reihe span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* =============================================================== PRÜFKORB */
+.zweispaltig { display: grid; grid-template-columns: 340px minmax(0, 1fr); height: 100%; }
+.zweispaltig > .spalte-liste { border-right: 1px solid var(--linie); overflow: auto; padding: 16px 12px; display: grid; gap: 8px; align-content: start; }
+.zweispaltig > .spalte-detail { overflow: auto; }
+.fund-karte { padding: 12px; border: 1px solid var(--linie); border-radius: var(--r); background: var(--flaeche); cursor: pointer; display: grid; gap: 6px; transition: border-color var(--uebergang); }
+.fund-karte:hover { border-color: var(--linie-hell); }
+.fund-karte.aktiv { border-color: var(--akzent); box-shadow: inset 2px 0 0 var(--akzent); }
+.fund-karte .titel { font: 600 13px var(--kopf); letter-spacing: .03em; color: var(--tinte-stark); }
+.fund-karte .meta { display: flex; gap: 10px; font: 10.5px var(--mono); color: var(--gedaempft); flex-wrap: wrap; }
+.art { font: 700 9px var(--kopf); letter-spacing: .16em; padding: 2px 6px; border-radius: 2px; background: var(--flaeche3); color: var(--gedaempft); text-transform: uppercase; }
+.art.web { color: var(--akzent); } .art.datei { color: var(--t-org); } .art.netzwerk { color: var(--einfach); }
+.status-offen { color: var(--einfach); } .status-uebernommen { color: var(--bestaetigt); } .status-teilweise { color: var(--akzent); } .status-verworfen { color: var(--widerrufen); }
+.filter { display: flex; gap: 4px; margin-bottom: 4px; }
+.filter button { flex: 1; padding: 6px; border: 1px solid var(--linie); background: transparent; color: var(--gedaempft); font: 600 10px var(--kopf); letter-spacing: .12em; cursor: pointer; border-radius: var(--r); text-transform: uppercase; }
+.filter button.aktiv { color: var(--akzent); border-color: var(--akzent); }
+
+.tabelle { width: 100%; border-collapse: collapse; font-size: 13px; }
+.tabelle th { text-align: left; font: 600 10px var(--kopf); letter-spacing: .14em; text-transform: uppercase; color: var(--gedaempft); padding: 8px 10px; border-bottom: 1px solid var(--linie-hell); position: sticky; top: 0; background: var(--grund2); z-index: 1; }
+.tabelle td { padding: 9px 10px; border-bottom: 1px solid var(--linie); vertical-align: top; }
+.tabelle tr:hover td { background: color-mix(in srgb, var(--flaeche2) 70%, transparent); }
+.tabelle tr.aus td { opacity: .42; }
+.tabelle .praed { font: 11.5px var(--mono); color: var(--akzent); white-space: nowrap; }
+.tabelle .ent { color: var(--tinte-stark); font-weight: 600; }
+.tabelle .ent.neu::after { content: "NEU"; margin-left: 6px; font: 700 8.5px var(--kopf); letter-spacing: .14em; color: var(--akzent); vertical-align: 1px; }
+.tabelle .beleg { font: 11px var(--mono); color: var(--gedaempft); max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; }
+.tabelle .zitat { font-size: 12px; color: var(--gedaempft); font-style: italic; margin-top: 4px; }
+.tabelle [contenteditable] { outline: none; border-bottom: 1px dashed transparent; }
+.tabelle [contenteditable]:hover { border-bottom-color: var(--linie-hell); }
+.tabelle [contenteditable]:focus { border-bottom-color: var(--akzent); }
+.auswahl-leiste { position: sticky; bottom: 0; display: flex; gap: 10px; align-items: center; padding: 12px 26px; border-top: 1px solid var(--linie-hell); background: color-mix(in srgb, var(--grund2) 94%, transparent); backdrop-filter: blur(4px); z-index: 4; }
+.auswahl-leiste .rechts { margin-left: auto; display: flex; gap: 8px; }
+.zusammenfassung { font-size: 14px; line-height: 1.65; color: var(--tinte); max-width: 900px; white-space: pre-wrap; }
+.suchspur { display: flex; flex-wrap: wrap; gap: 4px 12px; font: 11px var(--mono); color: var(--gedaempft); }
+.suchspur span::before { content: "› "; color: var(--akzent); }
+.raster-2 { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 14px; }
+.raster-3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
+
+/* ================================================================ LAGEBILD */
+.bericht { font: 15px/1.7 var(--text); max-width: 880px; }
+.bericht h2 { font-size: 17px; margin: 22px 0 8px; letter-spacing: .06em; text-transform: uppercase; color: var(--akzent); }
+.bericht h3 { font-size: 14px; margin: 16px 0 6px; }
+.bericht p { margin: 0 0 12px; }
+.bericht ul { margin: 0 0 12px; padding-left: 20px; }
+.bericht strong { color: var(--tinte-stark); }
+.zeitleiste svg { width: 100%; height: 150px; display: block; }
+.zeitleiste text { font: 10.5px var(--mono); fill: var(--gedaempft); }
+.zeitleiste .ereignis text { fill: var(--tinte); font: 11px var(--text); }
+.warnsignal { display: flex; gap: 10px; padding: 9px 12px; border: 1px solid color-mix(in srgb, var(--umstritten) 32%, transparent); border-radius: var(--r); background: color-mix(in srgb, var(--umstritten) 6%, transparent); font-size: 13px; }
+.warnsignal::before { content: "▲"; color: var(--umstritten); font-size: 11px; }
+.fluss-liste { display: grid; gap: 6px; }
+.fluss { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); gap: 10px; align-items: center; padding: 8px 10px; border: 1px solid var(--linie); border-radius: var(--r); font-size: 13px; }
+.fluss .pfeil { font: 11px var(--mono); color: var(--t-betrag); text-align: center; }
+.fluss .pfeil::after { content: " ──▶"; }
+.mini-netz { height: 320px; position: relative; border: 1px solid var(--linie); border-radius: var(--r); overflow: hidden; background: var(--grund); }
+
+/* ============================================================ SEITENLEISTE */
+.akte { padding: 18px 20px 40px; display: grid; gap: 16px; }
+.akte-kopf { display: grid; gap: 8px; padding-bottom: 14px; border-bottom: 1px solid var(--linie); }
+.akte-kopf h2 { font-size: 22px; line-height: 1.2; word-break: break-word; }
+.akte-kopf .zeile { display: flex; align-items: center; gap: 10px; }
+.akte-kopf .zeile .rechts { margin-left: auto; display: flex; gap: 6px; }
+.akte .fakt { padding: 10px 12px; border: 1px solid var(--linie); border-radius: var(--r); background: var(--flaeche); display: grid; gap: 6px; }
+.akte .fakt .satz { font-size: 13px; }
+.akte .fakt .satz .praed { font: 11.5px var(--mono); color: var(--akzent); }
+.akte .fakt .satz a { cursor: pointer; color: var(--tinte-stark); font-weight: 600; }
+.akte .beleg { font-size: 11.5px; color: var(--gedaempft); display: grid; gap: 3px; padding: 6px 0 0 10px; border-left: 1px solid var(--linie-hell); }
+.akte .beleg .aktionen { display: flex; gap: 10px; }
+.akte .beleg button { background: none; border: 0; padding: 0; color: var(--akzent); cursor: pointer; font-size: 11px; }
+.akte .beleg button.gefahr { color: var(--umstritten); }
+.schliessen { position: absolute; top: 12px; right: 12px; z-index: 2; }
+
+/* =============================================================== AUFTRÄGE */
+.auftraege-tafel { position: fixed; top: calc(var(--leiste) + 6px); right: 12px; width: 460px; max-height: 70vh; overflow: auto; z-index: 40; background: var(--flaeche); border: 1px solid var(--linie-hell); border-radius: var(--r); box-shadow: var(--schatten); padding: 14px; display: grid; gap: 10px; }
+.auftrag { border: 1px solid var(--linie); border-radius: var(--r); padding: 10px 12px; display: grid; gap: 6px; background: var(--grund2); }
+.auftrag .zeile { display: flex; gap: 8px; align-items: center; }
+.auftrag .zeile b { font: 600 12.5px var(--kopf); letter-spacing: .03em; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.auftrag .zustand { font: 700 9.5px var(--kopf); letter-spacing: .14em; text-transform: uppercase; }
+.zustand.laeuft, .zustand.wartet { color: var(--akzent); } .zustand.fertig { color: var(--bestaetigt); } .zustand.fehler { color: var(--umstritten); }
+.auftrag .fehler { color: var(--umstritten); font-size: 12px; }
+
+/* =================================================================== DIALOG */
+.dialog-huelle { position: fixed; inset: 0; z-index: 60; background: rgba(2,5,8,.72); backdrop-filter: blur(3px); display: grid; place-items: center; padding: 20px; }
+.dialog { width: min(560px, 100%); max-height: 88vh; overflow: auto; }
+.dialog.breit { width: min(860px, 100%); }
+.dialog .knopfreihe { display: flex; gap: 8px; justify-content: flex-end; }
+.code-feld { font: 12px/1.5 var(--mono); word-break: break-all; padding: 12px; background: var(--grund); border: 1px solid var(--akzent-tief); border-radius: var(--r); color: var(--akzent); user-select: all; }
+.hinweis { --ton: var(--einfach); padding: 10px 12px; border: 1px solid color-mix(in srgb, var(--ton) 32%, transparent); border-radius: var(--r); background: color-mix(in srgb, var(--ton) 6%, transparent); font-size: 12.5px; }
+.hinweis.gut { --ton: var(--bestaetigt); }
+.hinweis.schlecht { --ton: var(--umstritten); }
+
+.ablage { position: fixed; inset: 0; z-index: 70; display: grid; place-items: center; background: color-mix(in srgb, var(--grund) 80%, transparent); border: 2px dashed var(--akzent); }
+.ablage div { display: grid; gap: 8px; text-align: center; }
+.ablage b { font: 600 28px var(--kopf); letter-spacing: .2em; color: var(--akzent); text-transform: uppercase; }
+
+.meldungen { position: fixed; bottom: 40px; right: 16px; z-index: 80; display: grid; gap: 8px; width: 380px; }
+.meldung { --ton: var(--akzent); display: flex; gap: 10px; align-items: baseline; padding: 11px 14px; border: 1px solid color-mix(in srgb, var(--ton) 35%, var(--linie-hell)); background: var(--flaeche2); border-radius: var(--r); box-shadow: var(--schatten); font-size: 13px; animation: hinein .2s ease-out; }
+.meldung::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--ton); box-shadow: 0 0 8px var(--ton); transform: translateY(-1px); }
+.meldung.fehler { --ton: var(--umstritten); }
+.meldung.warn { --ton: var(--einfach); }
+@keyframes hinein { from { transform: translateY(8px); opacity: 0; } }
+
+/* ============================================================ EINSTELLUNGEN */
+.einst-raster { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+.wahl { display: flex; border: 1px solid var(--linie-hell); border-radius: var(--r); overflow: hidden; }
+.wahl label { flex: 1; display: block; cursor: pointer; }
+.wahl input { position: absolute; opacity: 0; pointer-events: none; }
+.wahl span { display: block; text-align: center; padding: 8px 6px; font: 600 11px var(--kopf); letter-spacing: .12em; text-transform: uppercase; color: var(--gedaempft); }
+.wahl input:checked + span { background: var(--akzent-tief); color: var(--akzent); }
+.schalter { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.schalter input { flex: none; }
+.zustandsfeld { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; font: 12px var(--mono); }
+.zustandsfeld dt { color: var(--gedaempft); }
+.zustandsfeld dd { margin: 0; word-break: break-all; }
+
+/* =================================================================== NETZWERKE */
+.mitglied { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--linie); border-radius: var(--r); background: var(--grund2); font-size: 13px; }
+.mitglied .adresse { font: 10.5px var(--mono); color: var(--gedaempft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 260px; }
+.mitglied .rechts { margin-left: auto; font: 10.5px var(--mono); color: var(--gedaempft); }
+.freigabe { padding: 10px 12px; border: 1px solid var(--linie); border-radius: var(--r); background: var(--flaeche); display: grid; gap: 5px; }
+.freigabe.ueberschneidung { border-color: color-mix(in srgb, var(--einfach) 55%, transparent); box-shadow: inset 2px 0 0 var(--einfach); }
+.freigabe .autor { font: 10.5px var(--mono); color: var(--gedaempft); display: flex; gap: 10px; align-items: center; }
+
+/* =================================================================== Breiten */
+@media (max-width: 1280px) {
+  .lage .kachel-karte, .lage .kachel-netz { grid-column: span 12; min-height: 380px; }
+  .lage .kachel-vorschlaege, .lage .kachel-aktivitaet, .lage .kachel-lagebild { grid-column: span 12; }
+  .kennzahlen { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  :root { --seite: 360px; }
+}
+@media (max-width: 960px) {
+  .arbeit { grid-template-columns: 0 minmax(0,1fr) 0; grid-template-rows: auto minmax(0,1fr) 28px; }
+  .schiene { position: fixed; bottom: 28px; left: 0; right: 0; flex-direction: row; overflow-x: auto; z-index: 20; height: 58px; padding: 4px; border-top: 1px solid var(--linie); }
+  .schiene button { min-width: 64px; }
+  .schiene button.aktiv::before { display: none; }
+  .leiste { grid-template-columns: 1fr auto; grid-template-rows: auto auto; padding: 8px 12px; gap: 8px; }
+  .leiste-mitte { grid-column: 1 / -1; grid-row: 2; }
+  .projektname, .trenner { display: none; }
+  .ansicht { padding-bottom: 60px; }
+  .seite { position: fixed; inset: 0; width: auto; z-index: 30; }
+  .zweispaltig { grid-template-columns: 1fr; height: auto; }
+  .start-raster, .raster-2, .raster-3 { grid-template-columns: 1fr; }
+  .kennzahlen { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .marke h1 { font-size: 30px; }
+  .start-inhalt { padding: 24px 16px; }
+  .suche .modus button { padding: 0 6px; }
+  .anzeige span { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Bauen / build
+build/
+dist/
+Ausgabe/
+
+# Tor Expert Bundle: von torproject.org laden und hier ablegen (siehe README)
+tor/
+
+# Werkzeug- und Rechnereinstellungen
+.claude/
+.impeccable/
+.vscode/
+.idea/
+
+# Projekt- und Benutzerdaten gehören nie ins Repository
+*.vault
+*.db
+*.sqlite
+indradaten/
